@@ -6,6 +6,28 @@
     android:padding="16dp"
     android:background="@android:color/darker_gray">
 
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="2"
+        android:layout_centerInParent="true"
+        android:padding="8dp">
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:visibility="gone"
+            android:src="@drawable/file_example_png_3mb" />
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:visibility="gone"
+            android:src="@drawable/marc_olivier_jodoin_j2veizss9sy_unsplash" />
+    </GridLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -135,5 +157,13 @@
             android:text="Dark Orange" />
 
     </GridLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"
+        style="?android:attr/progressBarStyleHorizontal" />
 
 </RelativeLayout>

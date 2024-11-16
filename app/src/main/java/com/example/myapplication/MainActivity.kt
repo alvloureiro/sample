@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity() {
                     it.setBackgroundColor(colors[colorIndex].toArgb())
                     colorIndex = (colorIndex + 1) % colors.size
                 }
-                handler.postDelayed(this, 200.toLong())
+                handler.postDelayed(this, 500.toLong())
             }
         }
 
@@ -114,12 +114,12 @@ class MainActivity : AppCompatActivity() {
     private fun setButtonsClickEvent() {
         buttons.forEach {
             it.setOnClickListener { button ->
-                handler.post {
-                    Log.d(
-                        "MainActivity",
-                        "setButtonsClickEvent ${button.id} - with color: " +
+                Log.d(
+                    "MainActivity",
+                    "setButtonsClickEvent ${button.id} - with color: " +
                             "${(button.background as ColorDrawable).color} clicked"
-                    )
+                )
+                handler.post {
                     val container = findViewById<View>(R.id.container)
                     val currentColor = (container.background as ColorDrawable).color
                     val color = (button.background as ColorDrawable).color
@@ -129,6 +129,34 @@ class MainActivity : AppCompatActivity() {
                         container.setBackgroundColor(animator.animatedValue as Int)
                     }
                     colorAnimation.start()
+                }
+
+                if (button.id == R.id.button1) {
+                    Log.d("MainActivity", "setButtonsClickEvent: button1 clicked")
+                    handler.post {
+                        val backImg = findViewById<View>(R.id.imageView)
+                        if (backImg.visibility == View.VISIBLE) {
+                            val alphaAnimation = ValueAnimator.ofFloat(1f, 0f)
+                            alphaAnimation.duration = 500
+                            alphaAnimation.addUpdateListener { animator ->
+                                backImg.alpha = animator.animatedValue as Float
+                                if (backImg.alpha == 0f) {
+                                    backImg.visibility = View.GONE
+                                }
+                            }
+                            alphaAnimation.start()
+                        } else {
+                            backImg.alpha = 0f
+                            backImg.visibility = View.VISIBLE
+                            val alphaAnimation = ValueAnimator.ofFloat(0f, 1f)
+                            alphaAnimation.duration = 500
+                            alphaAnimation.addUpdateListener { animator ->
+                                backImg.alpha = animator.animatedValue as Float
+                            }
+                            alphaAnimation.start()
+                        }
+                    }
+
                 }
             }
         }
