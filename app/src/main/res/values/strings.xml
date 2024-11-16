@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="widget_button_description">Button to launch the app</string>
+</resources>
