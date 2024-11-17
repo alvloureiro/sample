@@ -38,6 +38,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Start" />
+
+        <TextView
+            android:id="@+id/loadingTimeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Loading time: 0 ms"
+            android:layout_marginTop="16dp"
+            android:layout_gravity="center_horizontal"/>
     </LinearLayout>
 
     <GridLayout

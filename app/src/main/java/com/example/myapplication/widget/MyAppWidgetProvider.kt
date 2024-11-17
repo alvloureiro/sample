@@ -21,7 +21,12 @@ class MyAppWidgetProvider : AppWidgetProvider() {
             Log.i("MyAppWidgetProvider", "handleMessage: ${msg.what}")
             when (msg.what) {
                 1 -> {
-                    Log.d("MyAppWidgetProvider", "handleMessage: ${msg.obj}")
+                    Log.d(
+                        "MyAppWidgetProvider",
+                        "handleMessage from AppWidget Provider: ${
+                            msg.obj
+                        }"
+                    )
                     true
                 }
 

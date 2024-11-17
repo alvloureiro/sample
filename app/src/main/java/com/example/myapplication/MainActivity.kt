@@ -10,10 +10,10 @@ import android.os.Messenger
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
+import androidx.core.content.ContextCompat
 import com.example.myapplication.data.ButtonStateEntity
 import com.example.myapplication.data.ExampleViewModel
 
@@ -43,21 +43,25 @@ class MainActivity : AppCompatActivity() {
     }
     private var colorIndex = 0
     private var isChangingColor = false
-    private val colors = listOf(
-        Color.Red,
-        Color.Green,
-        Color.Blue,
-        Color.Yellow,
-        Color.Cyan,
-        Color.Magenta,
-        Color.Gray,
-        Color.Black,
-        Color.White,
-    )
+    private var colors = mutableListOf<Int>()
     private var buttons = mutableListOf<Button>()
+    private var startTime: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        startTime = System.currentTimeMillis()
         super.onCreate(savedInstanceState)
+        colors = mutableListOf(
+            ContextCompat.getColor(this, R.color.purple_200),
+            ContextCompat.getColor(this, R.color.purple_500),
+            ContextCompat.getColor(this, R.color.purple_700),
+            ContextCompat.getColor(this, R.color.teal_200),
+            ContextCompat.getColor(this, R.color.teal_700),
+            ContextCompat.getColor(this, android.R.color.holo_red_light),
+            ContextCompat.getColor(this, android.R.color.holo_blue_light),
+            ContextCompat.getColor(this, android.R.color.holo_green_light),
+            ContextCompat.getColor(this, android.R.color.holo_orange_light),
+            ContextCompat.getColor(this, android.R.color.holo_purple),
+        )
         setContentView(R.layout.activity_main)
         buttons.add(findViewById(R.id.button1))
         buttons.add(findViewById(R.id.button2))
@@ -98,10 +102,10 @@ class MainActivity : AppCompatActivity() {
                     exampleViewModel.insert(
                         ButtonStateEntity(
                             it.id,
-                            colors[colorIndex].toArgb()
+                            colors[colorIndex]
                         )
                     )
-                    it.setBackgroundColor(colors[colorIndex].toArgb())
+                    it.setBackgroundColor(colors[colorIndex])
                     colorIndex = (colorIndex + 1) % colors.size
                 }
                 handler.postDelayed(this, 500.toLong())
@@ -162,10 +166,40 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        Log.d("MainActivity", "onResume")
+        if (isChangingColor) {
+            startChangeColor()
+            findViewById<Button>(R.id.startButton).text = "Stop"
+        }
+        val elapsedTime = System.currentTimeMillis() - startTime
+        findViewById<TextView>(R.id.loadingTimeTextView).text = "Loading time: $elapsedTime ms"
+        super.onResume()
+    }
+
     override fun onPause() {
         Log.d("MainActivity", "onPause")
         handler.removeCallbacksAndMessages(null)
 
         super.onPause()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        Log.d("MainActivity", "onSaveInstanceState")
+        super.onSaveInstanceState(outState)
+        outState.putInt("colorIndex", colorIndex)
+        outState.putBoolean("isChangingColor", isChangingColor)
+    }
+
+    // This method is called only when the activity is re-created
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        Log.d("MainActivity", "onRestoreInstanceState")
+        super.onRestoreInstanceState(savedInstanceState)
+        colorIndex = savedInstanceState.getInt("colorIndex")
+        isChangingColor = savedInstanceState.getBoolean("isChangingColor")
+        if (isChangingColor) {
+            startChangeColor()
+            findViewById<Button>(R.id.startButton).text = "Stop"
+        }
     }
 }
